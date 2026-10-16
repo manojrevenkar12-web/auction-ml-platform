@@ -1,0 +1,134 @@
+{
+  "price_estimator": {
+    "verdict": "pass",
+    "errors": [],
+    "metrics": {
+      "mape": 0.07953211064260596,
+      "median_ape": 0.0638113628451556,
+      "within_10pct": 0.6973007712082262,
+      "mae": 743.5856902776052
+    },
+    "baseline": {
+      "mape": 0.6270985037780614,
+      "median_ape": 0.4804801278181095,
+      "within_10pct": 0.10111396743787489,
+      "mae": 4708.324764353042
+    },
+    "rows": {
+      "train": 19486,
+      "test": 4668
+    },
+    "timings_s": {
+      "extract": 0.1,
+      "validate": 0.02,
+      "transform": 0.6,
+      "train": 1.62,
+      "evaluate": 0.14
+    }
+  },
+  "sale_probability": {
+    "verdict": "pass",
+    "errors": [],
+    "metrics": {
+      "auc": 0.7962808188858701,
+      "brier": 0.16268582632815115,
+      "logloss": 0.4928976472559106
+    },
+    "baseline": {
+      "auc": 0.7447144925417382,
+      "brier": 0.18114006406079003,
+      "logloss": 0.59579360155676
+    },
+    "rows": {
+      "train": 27851,
+      "test": 6778
+    },
+    "timings_s": {
+      "extract": 0.13,
+      "validate": 0.03,
+      "transform": 0.65,
+      "train": 1.58,
+      "evaluate": 1.9
+    }
+  },
+  "transport_cost": {
+    "verdict": "pass",
+    "errors": [],
+    "metrics": {
+      "mape": 0.08079729847630636,
+      "mae": 47.410549003013955
+    },
+    "baseline": {
+      "mape": 0.12320760003178567,
+      "mae": 74.2651803845323
+    },
+    "rows": {
+      "train": 19155,
+      "test": 4629
+    },
+    "timings_s": {
+      "extract": 0.15,
+      "validate": 0.04,
+      "transform": 0.38,
+      "train": 0.74,
+      "evaluate": 0.11
+    }
+  },
+  "price_estimator_leaky": {
+    "verdict": "block",
+    "errors": [
+      "temporal_split",
+      "label_availability",
+      "post_event_features",
+      "point_in_time_join"
+    ],
+    "metrics": {
+      "mape": 0.06923939272448422,
+      "median_ape": 0.05654323336394403,
+      "within_10pct": 0.7529460409344635,
+      "mae": 653.1253834797122
+    },
+    "baseline": {
+      "mape": 0.585617403469437,
+      "median_ape": 0.48436770881941205,
+      "within_10pct": 0.09634070704982427,
+      "mae": 4803.805044449039
+    },
+    "rows": {
+      "train": 19508,
+      "test": 4837
+    },
+    "timings_s": {
+      "extract": 0.13,
+      "validate": 0.03,
+      "transform": 0.72,
+      "train": 1.64,
+      "evaluate": 0.13
+    }
+  },
+  "transport_cost_by_booking": {
+    "verdict": "block",
+    "errors": [
+      "backward_window"
+    ],
+    "metrics": {
+      "mape": 0.08070534826994982,
+      "mae": 47.316833636137055
+    },
+    "baseline": {
+      "mape": 0.12343903294829489,
+      "mae": 74.25152948801036
+    },
+    "rows": {
+      "train": 19155,
+      "test": 4629
+    },
+    "timings_s": {
+      "extract": 0.09,
+      "validate": 0.02,
+      "transform": 0.32,
+      "train": 0.64,
+      "evaluate": 0.1
+    }
+  }
+}

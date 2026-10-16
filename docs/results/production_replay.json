@@ -1,0 +1,1372 @@
+{
+  "releases": [
+    {
+      "model": "price_estimator",
+      "version": "price_estimator-20251101-302f7d7e",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ]
+    },
+    {
+      "model": "sale_probability",
+      "version": "sale_probability-20251101-03e1e176",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ]
+    },
+    {
+      "model": "transport_cost",
+      "version": "transport_cost-20251101-57f9b623",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ]
+    }
+  ],
+  "retrains": [
+    {
+      "model": "price_estimator",
+      "triggered_by": [
+        "listing__fuel=ev: mape 0.1793 vs 0.0838 at release (+114%, n=130)"
+      ],
+      "week": "2026-03-16",
+      "train_window": [
+        "2025-06-25",
+        "2026-02-23"
+      ],
+      "test_window": [
+        "2026-02-23",
+        "2026-03-16"
+      ],
+      "challenger": "price_estimator-20260223-8fff1a06",
+      "champion": "price_estimator-20251101-302f7d7e",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0761 vs threshold 0.1",
+        "beats_baseline": "mape 0.0761 vs baseline 0.6181: 87.7% better (need 30%)",
+        "vs_champion": "vs price_estimator-20251101-302f7d7e: improvement +0.0127 mape (95% CI +0.0106 .. +0.0145); non-inferiority margin 0.002",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1633 rows",
+        "serving_parity": "100.00% of 332 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 31.4 ms, p95 39.3 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "price_estimator",
+      "triggered_by": [
+        "listing__fuel=ev: mape 0.2301 vs 0.0975 at release (+136%, n=136)",
+        "listing__segment=premium: mape 0.1327 vs 0.0753 at release (+76%, n=151)"
+      ],
+      "week": "2026-03-30",
+      "train_window": [
+        "2025-07-09",
+        "2026-03-09"
+      ],
+      "test_window": [
+        "2026-03-09",
+        "2026-03-30"
+      ],
+      "challenger": "price_estimator-20260309-e331dfe5",
+      "champion": "price_estimator-20260223-8fff1a06",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0962 vs threshold 0.1",
+        "beats_baseline": "mape 0.0962 vs baseline 0.6406: 85.0% better (need 30%)",
+        "vs_champion": "vs price_estimator-20260223-8fff1a06: improvement +0.0018 mape (95% CI +0.0008 .. +0.0029); non-inferiority margin 0.002",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1748 rows",
+        "serving_parity": "100.00% of 371 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 32.8 ms, p95 44.0 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "price_estimator",
+      "triggered_by": [
+        "listing__fuel=ev: mape 0.2935 vs 0.1711 at release (+72%, n=140)"
+      ],
+      "week": "2026-04-20",
+      "train_window": [
+        "2025-07-30",
+        "2026-03-30"
+      ],
+      "test_window": [
+        "2026-03-30",
+        "2026-04-20"
+      ],
+      "challenger": "price_estimator-20260330-d3378224",
+      "champion": "price_estimator-20260309-e331dfe5",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0946 vs threshold 0.1",
+        "beats_baseline": "mape 0.0946 vs baseline 0.6856: 86.2% better (need 30%)",
+        "vs_champion": "vs price_estimator-20260309-e331dfe5: improvement +0.0229 mape (95% CI +0.0205 .. +0.0257); non-inferiority margin 0.002; underpowered: CI half-width 0.0026 exceeds the margin, so non-inferiority can only be shown by a clearly better challenger or a longer test window",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1703 rows",
+        "serving_parity": "100.00% of 380 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 33.4 ms, p95 43.5 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "transport_cost",
+      "triggered_by": [
+        "overall: mape 0.1255 vs 0.0808 at release (+55%)",
+        "shipment__segment=compact: mape 0.1227 vs 0.0782 at release (+57%, n=164)",
+        "shipment__segment=premium: mape 0.1291 vs 0.0820 at release (+57%, n=136)"
+      ],
+      "week": "2026-04-20",
+      "train_window": [
+        "2025-07-30",
+        "2026-03-30"
+      ],
+      "test_window": [
+        "2026-03-30",
+        "2026-04-20"
+      ],
+      "challenger": "transport_cost-20260330-8b14360a",
+      "champion": "transport_cost-20251101-57f9b623",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0926 vs threshold 0.12",
+        "beats_baseline": "mape 0.0926 vs baseline 0.1345: 31.1% better (need 15%)",
+        "vs_champion": "vs transport_cost-20251101-57f9b623: improvement +0.0163 mape (95% CI +0.0135 .. +0.0195); non-inferiority margin 0.002; underpowered: CI half-width 0.0030 exceeds the margin, so non-inferiority can only be shown by a clearly better challenger or a longer test window",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1669 rows",
+        "serving_parity": "100.00% of 359 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 21.4 ms, p95 32.6 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "sale_probability",
+      "triggered_by": [
+        "listing__seller_country: 12.5% of requests carry a category never seen in training"
+      ],
+      "week": "2026-05-11",
+      "train_window": [
+        "2025-08-20",
+        "2026-04-20"
+      ],
+      "test_window": [
+        "2026-04-20",
+        "2026-05-11"
+      ],
+      "challenger": "sale_probability-20260420-49514d06",
+      "champion": "sale_probability-20251101-03e1e176",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "auc=0.7874 vs threshold 0.75",
+        "beats_baseline": "auc 0.7874 vs baseline 0.7435: 18.0% better above chance (0.5) (need 10%)",
+        "vs_champion": "vs sale_probability-20251101-03e1e176: improvement -0.0001 auc (95% CI -0.0071 .. +0.0084); non-inferiority margin 0.01",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 2726 rows",
+        "serving_parity": "100.00% of 604 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 28.9 ms, p95 37.5 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "price_estimator",
+      "triggered_by": [
+        "listing__seller_country: 11.8% of requests carry a category never seen in training"
+      ],
+      "week": "2026-05-25",
+      "train_window": [
+        "2025-09-03",
+        "2026-05-04"
+      ],
+      "test_window": [
+        "2026-05-04",
+        "2026-05-25"
+      ],
+      "challenger": "price_estimator-20260504-bcad9bfd",
+      "champion": "price_estimator-20260330-d3378224",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0796 vs threshold 0.1",
+        "beats_baseline": "mape 0.0796 vs baseline 0.6896: 88.5% better (need 30%)",
+        "vs_champion": "vs price_estimator-20260330-d3378224: improvement +0.0294 mape (95% CI +0.0259 .. +0.0328); non-inferiority margin 0.002; underpowered: CI half-width 0.0034 exceeds the margin, so non-inferiority can only be shown by a clearly better challenger or a longer test window",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1914 rows",
+        "serving_parity": "100.00% of 439 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 34.1 ms, p95 48.0 ms (budget 100.0 ms)"
+      }
+    },
+    {
+      "model": "transport_cost",
+      "triggered_by": [
+        "shipment__lane: 12.9% of requests carry a category never seen in training"
+      ],
+      "week": "2026-05-25",
+      "train_window": [
+        "2025-09-03",
+        "2026-05-04"
+      ],
+      "test_window": [
+        "2026-05-04",
+        "2026-05-25"
+      ],
+      "challenger": "transport_cost-20260504-884d4ea6",
+      "champion": "transport_cost-20260330-8b14360a",
+      "decision": "approve",
+      "lanes": [
+        "dev",
+        "staging",
+        "prod"
+      ],
+      "checks": {
+        "pre_ship_review": "verdict=pass_with_warnings",
+        "threshold": "mape=0.0824 vs threshold 0.12",
+        "beats_baseline": "mape 0.0824 vs baseline 0.1232: 33.1% better (need 15%)",
+        "vs_champion": "vs transport_cost-20260330-8b14360a: improvement +0.0089 mape (95% CI +0.0067 .. +0.0116); non-inferiority margin 0.002; underpowered: CI half-width 0.0025 exceeds the margin, so non-inferiority can only be shown by a clearly better challenger or a longer test window",
+        "slices_vs_champion": "no slice regressed beyond tolerance",
+        "package_reproduces": "max |packaged - in-memory| = 0 over 1866 rows",
+        "serving_parity": "100.00% of 414 replayed requests match training features; 0 prediction mismatches",
+        "latency": "p50 20.4 ms, p95 27.1 ms (budget 100.0 ms)"
+      }
+    }
+  ],
+  "weeks": {
+    "price_estimator": [
+      {
+        "window": "2026-01-05",
+        "rows": 786,
+        "labelled": 0,
+        "prev_week_mape": NaN,
+        "pred_psi": 0.008,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/seller_90d__price_to_start_90d"
+      },
+      {
+        "window": "2026-01-12",
+        "rows": 780,
+        "labelled": 550,
+        "prev_week_mape": 0.0786,
+        "pred_psi": 0.006,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-19",
+        "rows": 797,
+        "labelled": 554,
+        "prev_week_mape": 0.0828,
+        "pred_psi": 0.006,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-26",
+        "rows": 837,
+        "labelled": 564,
+        "prev_week_mape": 0.0773,
+        "pred_psi": 0.019,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-02",
+        "rows": 851,
+        "labelled": 569,
+        "prev_week_mape": 0.0795,
+        "pred_psi": 0.007,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/seller_90d__price_to_start_90d"
+      },
+      {
+        "window": "2026-02-09",
+        "rows": 815,
+        "labelled": 597,
+        "prev_week_mape": 0.0812,
+        "pred_psi": 0.019,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-16",
+        "rows": 829,
+        "labelled": 562,
+        "prev_week_mape": 0.0829,
+        "pred_psi": 0.015,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-23",
+        "rows": 773,
+        "labelled": 580,
+        "prev_week_mape": 0.0799,
+        "pred_psi": 0.011,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-02",
+        "rows": 790,
+        "labelled": 527,
+        "prev_week_mape": 0.0794,
+        "pred_psi": 0.019,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-09",
+        "rows": 813,
+        "labelled": 556,
+        "prev_week_mape": 0.0843,
+        "pred_psi": 0.011,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "performance/listing__fuel=ev"
+      },
+      {
+        "window": "2026-03-16",
+        "rows": 841,
+        "labelled": 550,
+        "prev_week_mape": 0.1025,
+        "pred_psi": 0.006,
+        "warn": 5,
+        "critical": 1,
+        "pages": 6,
+        "alerts": "performance/listing__fuel=ev; performance/listing__segment=compact; performance/listing__segment=premium; performance/listing__segment=suv; performance/listing__seller_country=DE; performance/overall"
+      },
+      {
+        "window": "2026-03-23",
+        "rows": 836,
+        "labelled": 589,
+        "prev_week_mape": 0.1108,
+        "pred_psi": 0.022,
+        "warn": 3,
+        "critical": 3,
+        "pages": 6,
+        "alerts": "drift/seller_90d__price_to_start_90d; performance/listing__fuel=ev; performance/listing__segment=compact; performance/listing__segment=premium; performance/listing__seller_country=DE; performance/overall"
+      },
+      {
+        "window": "2026-03-30",
+        "rows": 800,
+        "labelled": 609,
+        "prev_week_mape": 0.1109,
+        "pred_psi": 0.004,
+        "warn": 5,
+        "critical": 2,
+        "pages": 1,
+        "alerts": "drift/seller_90d__price_to_start_90d; performance/listing__fuel=ev; performance/listing__segment=compact; performance/listing__segment=premium; performance/listing__segment=small; performance/listing__seller_country=DE; performance/overall"
+      },
+      {
+        "window": "2026-04-06",
+        "rows": 755,
+        "labelled": 546,
+        "prev_week_mape": 0.105,
+        "pred_psi": 0.008,
+        "warn": 5,
+        "critical": 2,
+        "pages": 7,
+        "alerts": "performance/listing__fuel=ev; performance/listing__segment=compact; performance/listing__segment=premium; performance/listing__segment=small; performance/listing__segment=suv; performance/listing__seller_country=DE; performance/overall"
+      },
+      {
+        "window": "2026-04-13",
+        "rows": 928,
+        "labelled": 529,
+        "prev_week_mape": 0.116,
+        "pred_psi": 0.005,
+        "warn": 2,
+        "critical": 3,
+        "pages": 4,
+        "alerts": "data_quality/listing__seller_country; data_quality/seller_90d__price_to_start_90d; drift/listing__seller_country; drift/seller_90d__price_to_start_90d; performance/listing__fuel=ev"
+      },
+      {
+        "window": "2026-04-20",
+        "rows": 919,
+        "labelled": 628,
+        "prev_week_mape": 0.1301,
+        "pred_psi": 0.006,
+        "warn": 7,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; drift/seller_90d__price_to_start_90d; performance/listing__fuel=ev; performance/listing__segment=compact; performance/listing__segment=premium; performance/listing__segment=small; performance/listing__segment=suv; performance/overall"
+      },
+      {
+        "window": "2026-04-27",
+        "rows": 922,
+        "labelled": 626,
+        "prev_week_mape": 0.1232,
+        "pred_psi": 0.028,
+        "warn": 4,
+        "critical": 2,
+        "pages": 6,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; performance/listing__fuel=ev; performance/listing__segment=premium; performance/listing__segment=small; performance/overall"
+      },
+      {
+        "window": "2026-05-04",
+        "rows": 885,
+        "labelled": 634,
+        "prev_week_mape": 0.1017,
+        "pred_psi": 0.019,
+        "warn": 1,
+        "critical": 2,
+        "pages": 1,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; drift/seller_90d__price_to_start_90d"
+      },
+      {
+        "window": "2026-05-11",
+        "rows": 958,
+        "labelled": 590,
+        "prev_week_mape": 0.1093,
+        "pred_psi": 0.01,
+        "warn": 1,
+        "critical": 2,
+        "pages": 1,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; performance/listing__fuel=diesel"
+      },
+      {
+        "window": "2026-05-18",
+        "rows": 910,
+        "labelled": 692,
+        "prev_week_mape": 0.1128,
+        "pred_psi": 0.009,
+        "warn": 2,
+        "critical": 2,
+        "pages": 1,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; drift/seller_90d__price_to_start_90d; performance/listing__segment=compact"
+      },
+      {
+        "window": "2026-05-25",
+        "rows": 972,
+        "labelled": 632,
+        "prev_week_mape": 0.1045,
+        "pred_psi": 0.006,
+        "warn": 3,
+        "critical": 2,
+        "pages": 1,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; drift/model_market_90d__volume_90d; drift/seller_90d__price_to_start_90d; performance/listing__segment=compact"
+      },
+      {
+        "window": "2026-06-01",
+        "rows": 928,
+        "labelled": 689,
+        "prev_week_mape": 0.1101,
+        "pred_psi": 0.007,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "performance/listing__segment=compact"
+      },
+      {
+        "window": "2026-06-08",
+        "rows": 892,
+        "labelled": 656,
+        "prev_week_mape": 0.0806,
+        "pred_psi": 0.018,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/model_market_90d__volume_90d"
+      },
+      {
+        "window": "2026-06-15",
+        "rows": 924,
+        "labelled": 594,
+        "prev_week_mape": 0.0766,
+        "pred_psi": 0.016,
+        "warn": 1,
+        "critical": 0,
+        "pages": 0,
+        "alerts": "drift/model_market_90d__volume_90d"
+      },
+      {
+        "window": "2026-06-22",
+        "rows": 925,
+        "labelled": 634,
+        "prev_week_mape": 0.0732,
+        "pred_psi": 0.013,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      }
+    ],
+    "sale_probability": [
+      {
+        "window": "2026-01-05",
+        "rows": 786,
+        "labelled": 0,
+        "prev_week_auc": NaN,
+        "pred_psi": 0.041,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-12",
+        "rows": 780,
+        "labelled": 786,
+        "prev_week_auc": 0.777,
+        "pred_psi": 0.028,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-19",
+        "rows": 797,
+        "labelled": 780,
+        "prev_week_auc": 0.7815,
+        "pred_psi": 0.016,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-26",
+        "rows": 837,
+        "labelled": 797,
+        "prev_week_auc": 0.7967,
+        "pred_psi": 0.008,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-02",
+        "rows": 851,
+        "labelled": 837,
+        "prev_week_auc": 0.8246,
+        "pred_psi": 0.005,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-09",
+        "rows": 815,
+        "labelled": 851,
+        "prev_week_auc": 0.7974,
+        "pred_psi": 0.015,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-16",
+        "rows": 829,
+        "labelled": 815,
+        "prev_week_auc": 0.8276,
+        "pred_psi": 0.025,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-23",
+        "rows": 773,
+        "labelled": 829,
+        "prev_week_auc": 0.8006,
+        "pred_psi": 0.006,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-02",
+        "rows": 790,
+        "labelled": 773,
+        "prev_week_auc": 0.8096,
+        "pred_psi": 0.019,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-09",
+        "rows": 813,
+        "labelled": 790,
+        "prev_week_auc": 0.799,
+        "pred_psi": 0.013,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-16",
+        "rows": 841,
+        "labelled": 813,
+        "prev_week_auc": 0.802,
+        "pred_psi": 0.045,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-23",
+        "rows": 836,
+        "labelled": 841,
+        "prev_week_auc": 0.7844,
+        "pred_psi": 0.025,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-30",
+        "rows": 800,
+        "labelled": 836,
+        "prev_week_auc": 0.7851,
+        "pred_psi": 0.013,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-04-06",
+        "rows": 755,
+        "labelled": 800,
+        "prev_week_auc": 0.7857,
+        "pred_psi": 0.011,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-04-13",
+        "rows": 928,
+        "labelled": 755,
+        "prev_week_auc": 0.8375,
+        "pred_psi": 0.026,
+        "warn": 1,
+        "critical": 5,
+        "pages": 6,
+        "alerts": "data_quality/listing__seller_country; data_quality/seller_90d__price_to_start_90d; drift/listing__seller_country; drift/seller_90d__listings_90d; drift/seller_90d__price_to_start_90d; drift/seller_90d__sell_through_90d"
+      },
+      {
+        "window": "2026-04-20",
+        "rows": 919,
+        "labelled": 928,
+        "prev_week_auc": 0.7893,
+        "pred_psi": 0.013,
+        "warn": 2,
+        "critical": 1,
+        "pages": 0,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country; drift/seller_90d__price_to_start_90d"
+      },
+      {
+        "window": "2026-04-27",
+        "rows": 922,
+        "labelled": 919,
+        "prev_week_auc": 0.7619,
+        "pred_psi": 0.016,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country"
+      },
+      {
+        "window": "2026-05-04",
+        "rows": 885,
+        "labelled": 922,
+        "prev_week_auc": 0.7912,
+        "pred_psi": 0.022,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country"
+      },
+      {
+        "window": "2026-05-11",
+        "rows": 958,
+        "labelled": 885,
+        "prev_week_auc": 0.8096,
+        "pred_psi": 0.024,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/listing__seller_country; drift/listing__seller_country"
+      },
+      {
+        "window": "2026-05-18",
+        "rows": 910,
+        "labelled": 958,
+        "prev_week_auc": 0.7915,
+        "pred_psi": 0.009,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-05-25",
+        "rows": 972,
+        "labelled": 910,
+        "prev_week_auc": 0.7829,
+        "pred_psi": 0.005,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-01",
+        "rows": 928,
+        "labelled": 972,
+        "prev_week_auc": 0.801,
+        "pred_psi": 0.003,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-08",
+        "rows": 892,
+        "labelled": 928,
+        "prev_week_auc": 0.808,
+        "pred_psi": 0.009,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-15",
+        "rows": 924,
+        "labelled": 892,
+        "prev_week_auc": 0.8067,
+        "pred_psi": 0.014,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-22",
+        "rows": 925,
+        "labelled": 924,
+        "prev_week_auc": 0.7849,
+        "pred_psi": 0.005,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      }
+    ],
+    "transport_cost": [
+      {
+        "window": "2026-01-05",
+        "rows": 564,
+        "labelled": 0,
+        "prev_week_mape": NaN,
+        "pred_psi": 0.086,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-12",
+        "rows": 549,
+        "labelled": 529,
+        "prev_week_mape": 0.0894,
+        "pred_psi": 0.064,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-19",
+        "rows": 578,
+        "labelled": 516,
+        "prev_week_mape": 0.0928,
+        "pred_psi": 0.028,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-01-26",
+        "rows": 565,
+        "labelled": 543,
+        "prev_week_mape": 0.0903,
+        "pred_psi": 0.048,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-02-02",
+        "rows": 581,
+        "labelled": 523,
+        "prev_week_mape": 0.091,
+        "pred_psi": 0.06,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/lane_cost_56d__median_cost_56d"
+      },
+      {
+        "window": "2026-02-09",
+        "rows": 581,
+        "labelled": 541,
+        "prev_week_mape": 0.095,
+        "pred_psi": 0.042,
+        "warn": 2,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/lane_cost_56d__median_cost_56d; performance/shipment__segment=suv"
+      },
+      {
+        "window": "2026-02-16",
+        "rows": 569,
+        "labelled": 553,
+        "prev_week_mape": 0.0935,
+        "pred_psi": 0.073,
+        "warn": 1,
+        "critical": 0,
+        "pages": 0,
+        "alerts": "drift/lane_cost_56d__median_cost_56d"
+      },
+      {
+        "window": "2026-02-23",
+        "rows": 543,
+        "labelled": 535,
+        "prev_week_mape": 0.0941,
+        "pred_psi": 0.066,
+        "warn": 2,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/lane_cost_56d__median_cost_56d; performance/shipment__segment=compact"
+      },
+      {
+        "window": "2026-03-02",
+        "rows": 553,
+        "labelled": 510,
+        "prev_week_mape": 0.0958,
+        "pred_psi": 0.047,
+        "warn": 1,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "performance/shipment__segment=premium"
+      },
+      {
+        "window": "2026-03-09",
+        "rows": 554,
+        "labelled": 514,
+        "prev_week_mape": 0.096,
+        "pred_psi": 0.032,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-16",
+        "rows": 562,
+        "labelled": 518,
+        "prev_week_mape": 0.0978,
+        "pred_psi": 0.023,
+        "warn": 2,
+        "critical": 0,
+        "pages": 2,
+        "alerts": "drift/lane_cost_56d__median_cost_56d; performance/shipment__segment=compact"
+      },
+      {
+        "window": "2026-03-23",
+        "rows": 610,
+        "labelled": 532,
+        "prev_week_mape": 0.0955,
+        "pred_psi": 0.053,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-03-30",
+        "rows": 568,
+        "labelled": 579,
+        "prev_week_mape": 0.098,
+        "pred_psi": 0.054,
+        "warn": 1,
+        "critical": 0,
+        "pages": 0,
+        "alerts": "drift/lane_cost_56d__median_cost_56d"
+      },
+      {
+        "window": "2026-04-06",
+        "rows": 523,
+        "labelled": 533,
+        "prev_week_mape": 0.1007,
+        "pred_psi": 0.01,
+        "warn": 2,
+        "critical": 0,
+        "pages": 1,
+        "alerts": "drift/lane_cost_56d__median_cost_56d; performance/shipment__segment=suv"
+      },
+      {
+        "window": "2026-04-13",
+        "rows": 611,
+        "labelled": 498,
+        "prev_week_mape": 0.0965,
+        "pred_psi": 0.092,
+        "warn": 6,
+        "critical": 2,
+        "pages": 7,
+        "alerts": "data_quality/lane_cost_56d__cost_per_km_56d; data_quality/lane_cost_56d__median_cost_56d; data_quality/lane_cost_56d__volume_56d; data_quality/shipment__lane; drift/lane_cost_56d__cost_per_km_56d; drift/lane_cost_56d__median_cost_56d; drift/shipment__lane; performance/shipment__segment=compact"
+      },
+      {
+        "window": "2026-04-20",
+        "rows": 642,
+        "labelled": 578,
+        "prev_week_mape": 0.1255,
+        "pred_psi": 0.033,
+        "warn": 1,
+        "critical": 5,
+        "pages": 4,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane; performance/overall; performance/shipment__segment=compact; performance/shipment__segment=premium; performance/shipment__segment=small"
+      },
+      {
+        "window": "2026-04-27",
+        "rows": 616,
+        "labelled": 595,
+        "prev_week_mape": 0.1061,
+        "pred_psi": 0.027,
+        "warn": 3,
+        "critical": 2,
+        "pages": 5,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane; performance/overall; performance/shipment__segment=compact; performance/shipment__segment=premium"
+      },
+      {
+        "window": "2026-05-04",
+        "rows": 597,
+        "labelled": 584,
+        "prev_week_mape": 0.0839,
+        "pred_psi": 0.06,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane"
+      },
+      {
+        "window": "2026-05-11",
+        "rows": 686,
+        "labelled": 550,
+        "prev_week_mape": 0.0866,
+        "pred_psi": 0.039,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane"
+      },
+      {
+        "window": "2026-05-18",
+        "rows": 632,
+        "labelled": 635,
+        "prev_week_mape": 0.0862,
+        "pred_psi": 0.044,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane"
+      },
+      {
+        "window": "2026-05-25",
+        "rows": 688,
+        "labelled": 583,
+        "prev_week_mape": 0.0945,
+        "pred_psi": 0.077,
+        "warn": 0,
+        "critical": 2,
+        "pages": 0,
+        "alerts": "data_quality/shipment__lane; drift/shipment__lane"
+      },
+      {
+        "window": "2026-06-01",
+        "rows": 657,
+        "labelled": 651,
+        "prev_week_mape": 0.0847,
+        "pred_psi": 0.104,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-08",
+        "rows": 604,
+        "labelled": 614,
+        "prev_week_mape": 0.0869,
+        "pred_psi": 0.05,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-15",
+        "rows": 621,
+        "labelled": 565,
+        "prev_week_mape": 0.0809,
+        "pred_psi": 0.071,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      },
+      {
+        "window": "2026-06-22",
+        "rows": 656,
+        "labelled": 574,
+        "prev_week_mape": 0.0836,
+        "pred_psi": 0.089,
+        "warn": 0,
+        "critical": 0,
+        "pages": 0,
+        "alerts": ""
+      }
+    ]
+  },
+  "requests_served": {
+    "price_estimator": 21466,
+    "sale_probability": 21466,
+    "transport_cost": 14910
+  },
+  "lanes": {
+    "price_estimator": {
+      "dev": "price_estimator-20260504-bcad9bfd",
+      "staging": "price_estimator-20260504-bcad9bfd",
+      "prod": "price_estimator-20260504-bcad9bfd",
+      "history": [
+        {
+          "at": "2026-10-16T10:39:07+00:00",
+          "lane": "dev",
+          "from": null,
+          "to": "price_estimator-20251101-302f7d7e",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:39:07+00:00",
+          "lane": "staging",
+          "from": null,
+          "to": "price_estimator-20251101-302f7d7e",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:39:07+00:00",
+          "lane": "prod",
+          "from": null,
+          "to": "price_estimator-20251101-302f7d7e",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:41:43+00:00",
+          "lane": "dev",
+          "from": "price_estimator-20251101-302f7d7e",
+          "to": "price_estimator-20260223-8fff1a06",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:41:43+00:00",
+          "lane": "staging",
+          "from": "price_estimator-20251101-302f7d7e",
+          "to": "price_estimator-20260223-8fff1a06",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:41:43+00:00",
+          "lane": "prod",
+          "from": "price_estimator-20251101-302f7d7e",
+          "to": "price_estimator-20260223-8fff1a06",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:42:23+00:00",
+          "lane": "dev",
+          "from": "price_estimator-20260223-8fff1a06",
+          "to": "price_estimator-20260309-e331dfe5",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:42:23+00:00",
+          "lane": "staging",
+          "from": "price_estimator-20260223-8fff1a06",
+          "to": "price_estimator-20260309-e331dfe5",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:42:23+00:00",
+          "lane": "prod",
+          "from": "price_estimator-20260223-8fff1a06",
+          "to": "price_estimator-20260309-e331dfe5",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:43:16+00:00",
+          "lane": "dev",
+          "from": "price_estimator-20260309-e331dfe5",
+          "to": "price_estimator-20260330-d3378224",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:43:16+00:00",
+          "lane": "staging",
+          "from": "price_estimator-20260309-e331dfe5",
+          "to": "price_estimator-20260330-d3378224",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:43:16+00:00",
+          "lane": "prod",
+          "from": "price_estimator-20260309-e331dfe5",
+          "to": "price_estimator-20260330-d3378224",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:45:08+00:00",
+          "lane": "dev",
+          "from": "price_estimator-20260330-d3378224",
+          "to": "price_estimator-20260504-bcad9bfd",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:45:08+00:00",
+          "lane": "staging",
+          "from": "price_estimator-20260330-d3378224",
+          "to": "price_estimator-20260504-bcad9bfd",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:45:08+00:00",
+          "lane": "prod",
+          "from": "price_estimator-20260330-d3378224",
+          "to": "price_estimator-20260504-bcad9bfd",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        }
+      ]
+    },
+    "sale_probability": {
+      "dev": "sale_probability-20260420-49514d06",
+      "staging": "sale_probability-20260420-49514d06",
+      "prod": "sale_probability-20260420-49514d06",
+      "history": [
+        {
+          "at": "2026-10-16T10:39:27+00:00",
+          "lane": "dev",
+          "from": null,
+          "to": "sale_probability-20251101-03e1e176",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:39:27+00:00",
+          "lane": "staging",
+          "from": null,
+          "to": "sale_probability-20251101-03e1e176",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:39:27+00:00",
+          "lane": "prod",
+          "from": null,
+          "to": "sale_probability-20251101-03e1e176",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:44:26+00:00",
+          "lane": "dev",
+          "from": "sale_probability-20251101-03e1e176",
+          "to": "sale_probability-20260420-49514d06",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:44:26+00:00",
+          "lane": "staging",
+          "from": "sale_probability-20251101-03e1e176",
+          "to": "sale_probability-20260420-49514d06",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:44:26+00:00",
+          "lane": "prod",
+          "from": "sale_probability-20251101-03e1e176",
+          "to": "sale_probability-20260420-49514d06",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        }
+      ]
+    },
+    "transport_cost": {
+      "dev": "transport_cost-20260504-884d4ea6",
+      "staging": "transport_cost-20260504-884d4ea6",
+      "prod": "transport_cost-20260504-884d4ea6",
+      "history": [
+        {
+          "at": "2026-10-16T10:39:38+00:00",
+          "lane": "dev",
+          "from": null,
+          "to": "transport_cost-20251101-57f9b623",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:39:38+00:00",
+          "lane": "staging",
+          "from": null,
+          "to": "transport_cost-20251101-57f9b623",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:39:38+00:00",
+          "lane": "prod",
+          "from": null,
+          "to": "transport_cost-20251101-57f9b623",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:43:28+00:00",
+          "lane": "dev",
+          "from": "transport_cost-20251101-57f9b623",
+          "to": "transport_cost-20260330-8b14360a",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:43:28+00:00",
+          "lane": "staging",
+          "from": "transport_cost-20251101-57f9b623",
+          "to": "transport_cost-20260330-8b14360a",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:43:28+00:00",
+          "lane": "prod",
+          "from": "transport_cost-20251101-57f9b623",
+          "to": "transport_cost-20260330-8b14360a",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:45:21+00:00",
+          "lane": "dev",
+          "from": "transport_cost-20260330-8b14360a",
+          "to": "transport_cost-20260504-884d4ea6",
+          "approved_by": null,
+          "reason": "release"
+        },
+        {
+          "at": "2026-10-16T10:45:21+00:00",
+          "lane": "staging",
+          "from": "transport_cost-20260330-8b14360a",
+          "to": "transport_cost-20260504-884d4ea6",
+          "approved_by": null,
+          "reason": "gate approved"
+        },
+        {
+          "at": "2026-10-16T10:45:21+00:00",
+          "lane": "prod",
+          "from": "transport_cost-20260330-8b14360a",
+          "to": "transport_cost-20260504-884d4ea6",
+          "approved_by": "on-call (simulated)",
+          "reason": "gate approved"
+        }
+      ]
+    }
+  },
+  "runtime_s": 454.6
+}

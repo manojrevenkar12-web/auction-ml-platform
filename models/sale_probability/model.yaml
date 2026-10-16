@@ -1,0 +1,51 @@
+name: sale_probability
+description: >
+  Probability that a listing sells at or above its start price. Shown to sellers
+  while they set the price; used to prioritise listings for buyer notifications.
+owner: marketplace
+task: classification
+prediction_point: listing
+entities_sql: entities.sql
+features:
+  - listing.make_model
+  - listing.segment
+  - listing.fuel
+  - listing.seller_country
+  - listing.age_months
+  - listing.mileage_km
+  - listing.damage_score
+  - listing.power_kw
+  - listing.start_price
+  - listing.relist_no
+  - model_market_90d.median_price_90d
+  - model_market_90d.median_age_months_90d
+  - segment_market_28d.median_price_28d
+  - segment_market_28d.sell_through_28d
+  - seller_90d.listings_90d
+  - seller_90d.sell_through_90d
+  - seller_90d.price_to_start_90d
+estimator:
+  max_iter: 300
+  learning_rate: 0.05
+  max_leaf_nodes: 31
+  min_samples_leaf: 60
+split:
+  kind: time
+  train_start: 2025-03-01
+  cutoff: 2025-11-01
+  test_end: 2026-01-01
+metrics: [auc, brier, logloss]
+baseline: seller_90d.sell_through_90d
+slices: [listing.fuel, listing.seller_country]
+gate:
+  primary_metric: auc
+  direction: higher
+  threshold: 0.75
+  min_rel_improvement_vs_baseline: 0.10
+  # 0.003 was the first choice and turned out untestable: on a 3-week retrain
+  # window the 95% CI of the AUC difference is about +/-0.008, and weekly
+  # production AUC already moves between 0.76 and 0.84. 0.01 is the smallest
+  # difference that is both material and resolvable. See README, "Findings".
+  champion_margin: 0.01
+  slice_tolerance: 0.05
+  max_latency_p95_ms: 100

@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests scripts feature_repo
+      - name: Type check (strict)
+        run: mypy
+      - name: Tests (builds the synthetic warehouse and feature store)
+        run: pytest -q --durations=10
+
+  review-and-gate:
+    # Every model spec in models/ goes through the pre-ship review and the
+    # fit-to-serve gate on every PR, so a methodology regression fails the build.
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -e .
+      - run: python -m aucsim
+      - run: aucml materialize
+      - name: Release every model to staging (review + gate)
+        run: |
+          for m in $(ls models | grep -v '^_'); do
+            aucml release "$m" --lane staging
+          done
+      - name: Deliberately leaky experiments must be blocked
+        run: |
+          for m in price_estimator_leaky transport_cost_by_booking; do
+            aucml run "$m" > /dev/null
+            if aucml review "$m"; then echo "::error::$m passed review"; exit 1; fi
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gate-decisions
+          path: registry/**/gate.md
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.8.8
+      - run: tofu fmt -check -recursive
+      - run: tofu init -backend=false -input=false
+      - run: tofu validate
+      - name: Plan tests with a mocked AWS provider
+        run: tofu test
+
+  serving-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t aucml-serving:${{ github.sha }} .

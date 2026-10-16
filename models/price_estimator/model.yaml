@@ -1,0 +1,47 @@
+name: price_estimator
+description: >
+  Expected hammer price of a car at listing time, before the seller sets a start
+  price. Used to recommend start prices and to flag listings priced far from market.
+owner: pricing
+task: regression
+prediction_point: listing
+entities_sql: entities.sql
+features:
+  - listing.make_model
+  - listing.segment
+  - listing.fuel
+  - listing.seller_country
+  - listing.age_months
+  - listing.mileage_km
+  - listing.km_per_month
+  - listing.damage_score
+  - listing.power_kw
+  - model_market_90d.median_price_90d
+  - model_market_90d.median_age_months_90d
+  - model_market_90d.median_km_90d
+  - model_market_90d.volume_90d
+  - segment_market_28d.median_price_28d
+  - segment_market_28d.price_trend_28d
+  - seller_90d.price_to_start_90d
+estimator:
+  max_iter: 500
+  learning_rate: 0.06
+  max_leaf_nodes: 31
+  min_samples_leaf: 40
+  log_target: true
+split:
+  kind: time
+  train_start: 2025-03-01
+  cutoff: 2025-11-01
+  test_end: 2026-01-01
+metrics: [mape, median_ape, within_10pct, mae]
+baseline: model_market_90d.median_price_90d
+slices: [listing.fuel, listing.seller_country, listing.segment]
+gate:
+  primary_metric: mape
+  direction: lower
+  threshold: 0.10
+  min_rel_improvement_vs_baseline: 0.30
+  champion_margin: 0.002
+  slice_tolerance: 0.05
+  max_latency_p95_ms: 100

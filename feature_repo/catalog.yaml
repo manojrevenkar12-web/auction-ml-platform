@@ -1,0 +1,126 @@
+# Feature catalog shared by every model on the platform.
+#
+# kind: on_demand  -> computed from request fields by a Python transform, the SAME
+#                     function at training time and at inference time.
+# kind: batch      -> daily snapshots materialised from the warehouse into the
+#                     offline store (Parquet) and the online store (SQLite here,
+#                     SageMaker Feature Store online in AWS).
+#
+# available_at: earliest lifecycle point at which the value exists. A model whose
+#               prediction_point comes earlier may not use it (checked by `review`).
+# Every batch row carries event_time (snapshot time) and known_at (latest time
+# any source value in the aggregate became known). Training rows must satisfy
+# known_at <= as_of, which is how backward-window errors are caught.
+
+prediction_points: [listing, auction_end, delivery]
+
+groups:
+  listing:
+    kind: on_demand
+    transform: listing_features
+    available_at: listing
+    request_fields: [make, model, fuel, segment, first_registration, mileage_km,
+                     damage_score, power_kw, start_price, seller_id, seller_country,
+                     relist_no, as_of]
+    # field -> the features that need it. A model that uses none of those
+    # features does not require the field (the price model runs before the
+    # seller has chosen a start price).
+    optional_fields:
+      start_price: [start_price]
+      relist_no: [relist_no]
+    keys: [seller_id, mm_fuel_key, sf_key, auction_id]
+    features:
+      make_model: categorical
+      segment: categorical
+      fuel: categorical
+      seller_country: categorical
+      age_months: numeric
+      mileage_km: numeric
+      km_per_month: numeric
+      damage_score: numeric
+      power_kw: numeric
+      start_price: numeric
+      relist_no: numeric
+
+  shipment:
+    kind: on_demand
+    transform: shipment_features
+    available_at: auction_end
+    request_fields: [origin_country, dest_country, segment, damage_score, as_of]
+    keys: [lane_key]
+    features:
+      lane: categorical
+      segment: categorical
+      non_runner: numeric
+      quote_month: numeric
+
+  lane_reference:
+    kind: batch
+    entity: lane_key
+    sql: sql/lane_reference.sql
+    available_at: listing
+    features:
+      distance_km: numeric
+
+  seller_90d:
+    kind: batch
+    entity: seller_id
+    sql: sql/seller_90d.sql
+    available_at: listing
+    features:
+      listings_90d: numeric
+      sell_through_90d: numeric
+      price_to_start_90d: numeric
+
+  model_market_90d:
+    kind: batch
+    entity: mm_fuel_key
+    sql: sql/model_market_90d.sql
+    available_at: listing
+    features:
+      median_price_90d: numeric
+      median_age_months_90d: numeric
+      median_km_90d: numeric
+      volume_90d: numeric
+
+  segment_market_28d:
+    kind: batch
+    entity: sf_key
+    sql: sql/segment_market_28d.sql
+    available_at: listing
+    features:
+      median_price_28d: numeric
+      price_trend_28d: numeric
+      sell_through_28d: numeric
+
+  lane_cost_56d:
+    kind: batch
+    entity: lane_key
+    sql: sql/lane_cost_56d.sql
+    available_at: auction_end
+    features:
+      median_cost_56d: numeric
+      cost_per_km_56d: numeric
+      volume_56d: numeric
+
+  # Deliberately wrong twin of lane_cost_56d: windows on booking time instead of
+  # delivery time, so it aggregates costs that were not yet known. Kept so the
+  # review can be shown catching it. Not used by any production model.
+  lane_cost_56d_by_booking:
+    kind: batch
+    entity: lane_key
+    sql: sql/lane_cost_56d_by_booking.sql
+    available_at: auction_end
+    features:
+      median_cost_56d: numeric
+      cost_per_km_56d: numeric
+      volume_56d: numeric
+
+  # Outcome of the auction itself. Exists only once the auction has ended.
+  auction_outcome:
+    kind: batch
+    entity: auction_id
+    sql: sql/auction_outcome.sql
+    available_at: auction_end
+    features:
+      n_bids: numeric

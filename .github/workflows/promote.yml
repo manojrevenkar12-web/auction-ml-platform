@@ -1,0 +1,64 @@
+name: promote
+
+# Governed promotion lanes. A version moves dev -> staging -> prod only through
+# this workflow; the registry enforces the rules (approved gate, staging first,
+# named approver) and the prod job additionally waits for a required reviewer
+# on the GitHub `prod` environment.
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: model name (models/<name>/model.yaml)
+        required: true
+      version:
+        description: registry version (run id)
+        required: true
+      lane:
+        description: target lane
+        required: true
+        type: choice
+        options: [staging, prod]
+
+permissions:
+  id-token: write   # OIDC to AWS, no long-lived keys
+  contents: read
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.lane }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[aws]"
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-central-1
+      - name: Pull registry state
+        run: aws s3 sync "s3://${{ vars.REGISTRY_BUCKET }}/registry" registry
+      - name: Promote (registry enforces the lane rules)
+        run: >
+          aucml promote "${{ inputs.model }}" "${{ inputs.version }}" "${{ inputs.lane }}"
+          --approved-by "${{ github.actor }}" --reason "workflow run ${{ github.run_id }}"
+      - name: Render deployed models for Terraform
+        run: >
+          python scripts/render_tfvars.py ${{ inputs.lane }}
+          --artifacts-bucket "${{ vars.ARTIFACTS_BUCKET }}"
+          > infra/terraform/environments/${{ inputs.lane }}.models.tfvars.json
+      - uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.8.8
+      - name: Apply (canary rollout with automatic rollback on alarms)
+        working-directory: infra/terraform
+        run: |
+          tofu init -input=false -backend-config=environments/${{ inputs.lane }}.backend.hcl
+          tofu apply -input=false -auto-approve \
+            -var-file=environments/${{ inputs.lane }}.tfvars \
+            -var-file=environments/${{ inputs.lane }}.models.tfvars.json \
+            -var serving_image_tag=${{ github.sha }}
+      - name: Push registry state
+        run: aws s3 sync registry "s3://${{ vars.REGISTRY_BUCKET }}/registry"

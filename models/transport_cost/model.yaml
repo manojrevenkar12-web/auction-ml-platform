@@ -1,0 +1,40 @@
+name: transport_cost
+description: >
+  Cost of delivering a sold car from the seller's country to the buyer's, quoted
+  to the buyer at auction end.
+owner: logistics
+task: regression
+prediction_point: auction_end
+entities_sql: entities.sql
+features:
+  - shipment.lane
+  - shipment.segment
+  - shipment.non_runner
+  - shipment.quote_month
+  - lane_reference.distance_km
+  - lane_cost_56d.median_cost_56d
+  - lane_cost_56d.cost_per_km_56d
+  - lane_cost_56d.volume_56d
+estimator:
+  max_iter: 300
+  learning_rate: 0.05
+  max_leaf_nodes: 15
+  min_samples_leaf: 40
+  log_target: true
+split:
+  kind: time
+  train_start: 2025-03-01
+  cutoff: 2025-11-01
+  test_end: 2026-01-01
+  embargo_days: 0
+metrics: [mape, mae]
+baseline: lane_cost_56d.median_cost_56d
+slices: [shipment.segment]
+gate:
+  primary_metric: mape
+  direction: lower
+  threshold: 0.12
+  min_rel_improvement_vs_baseline: 0.15
+  champion_margin: 0.002
+  slice_tolerance: 0.05
+  max_latency_p95_ms: 100

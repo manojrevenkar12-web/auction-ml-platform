@@ -1,0 +1,36 @@
+# Same model as transport_cost, but the lane-cost feature windows on booking
+# time: it averages costs of cars that are still on the truck (backward-window
+# error). Time split and point-in-time join are both correct, so only the
+# known_at audit can catch it.
+name: transport_cost_by_booking
+description: Deliberately wrong lane-cost window used to demonstrate the known_at audit.
+owner: logistics
+task: regression
+prediction_point: auction_end
+entities_sql: ../transport_cost/entities.sql
+features:
+  - shipment.lane
+  - shipment.segment
+  - shipment.non_runner
+  - shipment.quote_month
+  - lane_reference.distance_km
+  - lane_cost_56d_by_booking.median_cost_56d
+  - lane_cost_56d_by_booking.cost_per_km_56d
+  - lane_cost_56d_by_booking.volume_56d
+estimator:
+  max_iter: 300
+  learning_rate: 0.05
+  max_leaf_nodes: 15
+  log_target: true
+split:
+  kind: time
+  train_start: 2025-03-01
+  cutoff: 2025-11-01
+  test_end: 2026-01-01
+metrics: [mape, mae]
+baseline: lane_cost_56d_by_booking.median_cost_56d
+slices: [shipment.segment]
+gate:
+  primary_metric: mape
+  direction: lower
+  threshold: 0.12

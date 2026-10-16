@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aucml"
+version = "0.1.0"
+description = "Shared ML platform for many models: point-in-time feature store, governed promotion lanes, fit-to-serve gate, drift monitoring."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=2.0",
+  "pandas>=2.2",
+  "scikit-learn>=1.5",
+  "scipy>=1.12",
+  "duckdb>=1.1",
+  "pyarrow>=16",
+  "pyyaml>=6",
+  "pydantic>=2.7",
+  "joblib>=1.4",
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+]
+
+[project.optional-dependencies]
+aws = ["boto3>=1.34"]
+dev = ["pytest>=8", "httpx>=0.27", "mypy>=1.10", "ruff>=0.5", "pandas-stubs", "types-PyYAML", "boto3>=1.34"]
+
+[project.scripts]
+aucml = "aucml.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 150
+target-version = "py311"
+extend-exclude = ["runs", "registry", "store", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002", "RUF003", "SIM108"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+mypy_path = "src"
+packages = ["aucml"]
+warn_return_any = false
+disallow_any_generics = false
+
+[[tool.mypy.overrides]]
+module = ["sklearn.*", "scipy.*", "joblib.*", "duckdb.*", "boto3.*", "botocore.*", "uvicorn.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
