@@ -71,7 +71,7 @@ class SlackWebhookSink:
         if body is None:
             return
         req = urllib.request.Request(self.url, data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
-        urllib.request.urlopen(req, timeout=5).close()  # noqa: S310 - URL comes from operator config
+        urllib.request.urlopen(req, timeout=5).close()
 
 
 def emf_record(namespace: str, model: str, metrics: dict[str, float], timestamp_ms: int) -> dict[str, object]:

@@ -36,7 +36,16 @@ def read_capture(paths: list[Path], start: pd.Timestamp, end: pd.Timestamp, mode
                     continue
                 ts = pd.Timestamp(r["as_of"])
                 if start <= ts < end:
-                    rows.append({"event_id": r["event_id"], "entity_id": r["request"].get("request_id"), "as_of": ts, "version": r["version"], "prediction": r["prediction"], **r["features"]})
+                    rows.append(
+                        {
+                            "event_id": r["event_id"],
+                            "entity_id": r["request"].get("request_id"),
+                            "as_of": ts,
+                            "version": r["version"],
+                            "prediction": r["prediction"],
+                            **r["features"],
+                        }
+                    )
     return pd.DataFrame(rows)
 
 
@@ -78,18 +87,44 @@ def score(
         sev = _sev(val, t["warn"], t["critical"])
         if sev:
             check = "prediction_drift" if col == PREDICTION else "drift"
-            alerts.append(Alert(name, version, window, check, col, sev, val, t[sev], f"PSI {val:.3f} (healthy max {t['noise_max']:.3f}, {sev} at {t[sev]:.3f})"))  # type: ignore[arg-type]
+            alerts.append(
+                Alert(name, version, window, check, col, sev, val, t[sev], f"PSI {val:.3f} (healthy max {t['noise_max']:.3f}, {sev} at {t[sev]:.3f})")
+            )  # type: ignore[arg-type]
 
     unseen = {c: unseen_rate(profile, c, captured[c]) for c in manifest["categorical"]}
     for col, val in unseen.items():
         sev = _sev(val, UNSEEN_WARN, UNSEEN_CRIT)
         if sev:
-            alerts.append(Alert(name, version, window, "data_quality", col, sev, val, UNSEEN_WARN if sev == "warn" else UNSEEN_CRIT, f"{100 * val:.1f}% of requests carry a category never seen in training"))  # type: ignore[arg-type]
+            alerts.append(
+                Alert(
+                    name,
+                    version,
+                    window,
+                    "data_quality",
+                    col,
+                    sev,
+                    val,
+                    UNSEEN_WARN if sev == "warn" else UNSEEN_CRIT,
+                    f"{100 * val:.1f}% of requests carry a category never seen in training",
+                )
+            )  # type: ignore[arg-type]
     for col in manifest["columns"]:
         ref_null = profile[col]["null_rate"]
         now = float(captured[col].isna().mean())
         if now - ref_null >= NULL_SHIFT_WARN:
-            alerts.append(Alert(name, version, window, "data_quality", col, "warn", now, ref_null + NULL_SHIFT_WARN, f"null rate {100 * now:.1f}% vs {100 * ref_null:.1f}% in training"))
+            alerts.append(
+                Alert(
+                    name,
+                    version,
+                    window,
+                    "data_quality",
+                    col,
+                    "warn",
+                    now,
+                    ref_null + NULL_SHIFT_WARN,
+                    f"null rate {100 * now:.1f}% vs {100 * ref_null:.1f}% in training",
+                )
+            )
 
     perf: dict[str, Any] = {}
     if labels is not None and len(labels):
@@ -106,7 +141,11 @@ def score(
             degr = (val - ref) / ref if direction == "lower" else (ref - val) / ref
             sev = _sev(degr, PERF_WARN, PERF_CRIT)
             if sev:
-                alerts.append(Alert(name, version, window, "performance", "overall", sev, val, ref, f"{pm} {val:.4f} vs {ref:.4f} at release ({100 * degr:+.0f}%)"))  # type: ignore[arg-type]
+                alerts.append(
+                    Alert(
+                        name, version, window, "performance", "overall", sev, val, ref, f"{pm} {val:.4f} vs {ref:.4f} at release ({100 * degr:+.0f}%)"
+                    )
+                )  # type: ignore[arg-type]
             perf["slices"] = {}
             for col in slice_columns or []:
                 ref_rows = {r["value"]: r["model"] for r in manifest.get("slice_performance", {}).get(col, []) if r["model"] is not None}
@@ -119,7 +158,19 @@ def score(
                     d = (sv - sref) / sref if direction == "lower" else (sref - sv) / sref
                     sev = _sev(d, PERF_WARN, PERF_CRIT)
                     if sev:
-                        alerts.append(Alert(name, version, window, "performance", f"{col}={v}", sev, sv, sref, f"{pm} {sv:.4f} vs {sref:.4f} at release ({100 * d:+.0f}%, n={len(grp)})"))  # type: ignore[arg-type]
+                        alerts.append(
+                            Alert(
+                                name,
+                                version,
+                                window,
+                                "performance",
+                                f"{col}={v}",
+                                sev,
+                                sv,
+                                sref,
+                                f"{pm} {sv:.4f} vs {sref:.4f} at release ({100 * d:+.0f}%, n={len(grp)})",
+                            )
+                        )  # type: ignore[arg-type]
     return WindowReport(window, len(captured), int(perf.get("labelled", 0)), psi, unseen, perf, alerts)
 
 

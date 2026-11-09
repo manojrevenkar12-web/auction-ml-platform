@@ -40,12 +40,18 @@ def _cat_profile(x: pd.Series, min_share: float = 0.01) -> dict[str, Any]:
     s = x.astype(object).where(x.notna(), MISSING).astype(str)
     share = s.value_counts(normalize=True)
     keep = [str(k) for k, v in share.items() if v >= min_share]
-    return {"kind": "categorical", "categories": keep, "known": sorted(map(str, share.index)), "freq": _cat_freq(s, keep, None).tolist(), "null_rate": float(x.isna().mean())}
+    return {
+        "kind": "categorical",
+        "categories": keep,
+        "known": sorted(map(str, share.index)),
+        "freq": _cat_freq(s, keep, None).tolist(),
+        "null_rate": float(x.isna().mean()),
+    }
 
 
 def _cat_freq(s: pd.Series, keep: list[str], known: set[str] | None) -> np.ndarray:
     """Share per kept category, then OTHER (seen in reference, rare) and UNSEEN."""
-    labels = keep + [OTHER, UNSEEN]
+    labels = [*keep, OTHER, UNSEEN]
     if known is None:
         mapped = s.where(s.isin(keep), OTHER)
     else:
